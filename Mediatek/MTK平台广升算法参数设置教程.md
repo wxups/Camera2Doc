@@ -39,21 +39,21 @@
 
 #### 为指定的镜头创建专属配置文件
 
-这里先描述下配置文件的生效规则：
+需求：现有前后微3个镜头都需要 HDR 算法，但是前摄效果不佳，需要单独为前摄制定配置文件。  
+按以下步骤操作：  
+1. 复制现有的 adu_hdr_cam.ini 文件，将复制后的文件改名为 adu_hdr_cam1.ini。  
+1. 将 adu_hdr_cam1.ini 按需求修改。  
+1. 根据上文的方法将新文件 push 到设备中。  
+
+下为配置文件的生效规则：
 > 配置文件搜索优先级：  
 > adu_[name]_cam[camid].ini > adu_[name]_cam.ini > adu_common_cam[camid].ini > adu_common_cam.ini
 > 
 > 以下为 HDR 算法的示例  
 > adu_hdr_cam0.ini,adu_hdr_cam1.ini, > adu_hdr_cam.ini > adu_common_cam0.ini,adu_common_cam1.ini > adu_common_cam.ini
 > 
-> 可以发现配置文件的规则为**算法名 + CameraID**的组合。
+> 可以发现配置文件的规则为**算法名 + CameraID**的组合，不指定将用默认值代替。
 >
-现有需求前后微3个镜头都需要 HDR 算法，但是前摄效果不佳，需要单独为前摄制定配置文件。  
-可以按以下步骤操作：  
-1. 复制现有的 adu_hdr_cam.ini 文件，将复制后的文件改名为 adu_hdr_cam1.ini。  
-1. 将 adu_hdr_cam1.ini 按需求修改。  
-1. 根据上文的方法将新文件 push 到设备中。  
-  
 
 #### DUMP 原始输入输出图片（YUV NV21）：
 
