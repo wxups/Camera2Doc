@@ -37,20 +37,38 @@
 
 ### 附
 
+#### 为指定的镜头创建专属配置文件
+
+这里先描述下配置文件的生效规则：
+> 配置文件搜索优先级：  
+> adu_[name]_cam[camid].ini > adu_[name]_cam.ini > adu_common_cam[camid].ini > adu_common_cam.ini
+> 
+> 以下为 HDR 算法的示例  
+> adu_hdr_cam0.ini,adu_hdr_cam1.ini, > adu_hdr_cam.ini > adu_common_cam0.ini,adu_common_cam1.ini > adu_common_cam.ini
+> 
+> 可以发现配置文件的规则为**算法名 + CameraID**的组合。
+>
+现有需求前后微3个镜头都需要 HDR 算法，但是前摄效果不佳，需要单独为前摄制定配置文件。  
+可以按以下步骤操作：  
+1. 复制现有的 adu_hdr_cam.ini 文件，将复制后的文件改名为 adu_hdr_cam1.ini。
+   （新加的 1 代表在 Android 系统中为该镜头定义的 id，Android 中一般 0 为后摄，1 为前摄，2 或 3 将根据厂商的不同可能是微距广角或夜视等）  
+1. 根据上文的方法将新文件 push 到设备中。  
+  
+
 #### DUMP 原始输入输出图片（YUV NV21）：
 
-   1. 宿主机执行命令打开 dump `adb shell setprop vendor.debug.camera.adu_hdr.dump 1`，执行后务必切换到桌面再进入相机 App 让命令生效。  
-   1. HDR 拍照后宿主机执行命令 `adb pull /data/vendor/camera_dump/hdr ./hdr` 将 dump 图导出。
+  1. 宿主机执行命令打开 dump `adb shell setprop vendor.debug.camera.adu_hdr.dump 1`，执行后务必切换到桌面再进入相机 App 让命令生效。  
+  1. HDR 拍照后宿主机执行命令 `adb pull /data/vendor/camera_dump/hdr ./hdr` 将 dump 图导出。
       
-      ![image](images/img_cz_03.png)
-      ![image](images/img_cz_04.png)
+     ![image](images/img_cz_03.png)
+     ![image](images/img_cz_04.png)
 
-      导出后即可查看图片，其中 before 开头的是从系统中抓取的原始输入图，out 是经过算法合成后的图像。  
-      由于是 NV21 格式，需要下载特定工具才能查看。  
-      我们推荐使用 PixelViewer [https://carinastudio.azurewebsites.net/PixelViewer/](https://carinastudio.azurewebsites.net/PixelViewer/) 是一款免费开源的原始图像查看器。  
-      下载后将导出的文件拖入程序内
-      
-      ![image](images/img_cz_05.png)
+     导出后即可查看图片，其中 before 开头的是从系统中抓取的原始输入图，out 是经过算法合成后的图像。  
+     由于是 NV21 格式，需要下载特定工具才能查看。  
+     我们推荐使用 PixelViewer [https://carinastudio.azurewebsites.net/PixelViewer/](https://carinastudio.azurewebsites.net/PixelViewer/) 是一款免费开源的原始图像查看器。  
+     下载后将导出的文件拖入程序内
+     
+     ![image](images/img_cz_05.png)
 
-      需要知晓的是，如果看到的图像色彩不对，请按照上方例图正确选择程序内右侧的格式 **（NV21(YUV420sp)）**。  
-      如果图像方向不对，这是正常的，因为 Android 出来的原始图像都是横的，后摄图像一般是头朝左，前摄图像一般是头朝右，请勿见怪。  
+     需要知晓的是，如果看到的图像色彩不对，请按照上方例图正确选择程序内右侧的格式 **（NV21(YUV420sp)）**。  
+     如果图像方向不对，这是正常的，因为 Android 出来的原始图像都是横的，后摄图像一般是头朝左，前摄图像一般是头朝右，请勿见怪。  
