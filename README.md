@@ -2,4 +2,5 @@
 
 ### Mediatek 相关文档
 * [FAQ.md](./Mediatek/FAQ.md)
+* [MTK平台广升相机常用属性.md](./MTK平台广升相机常用属性.md)
 * [MTK平台广升算法参数设置教程.md](./Mediatek/MTK平台广升算法参数设置教程.md)
