@@ -52,7 +52,7 @@
 
 下为配置文件的生效规则：
 > 配置文件搜索优先级：  
-> adu_[name]_cam[camid].ini > adu_[name]_cam.ini > adu_common_cam[camid].ini > adu_common_cam.ini
+> adu\_[name]\_cam[camid].ini > adu\_[name]\_cam.ini > adu_common\_cam[camid].ini > adu\_common\_cam.ini
 > 
 > 以下为 HDR 算法的示例  
 > adu_hdr_cam0.ini,adu_hdr_cam1.ini, > adu_hdr_cam.ini > adu_common_cam0.ini,adu_common_cam1.ini > adu_common_cam.ini
