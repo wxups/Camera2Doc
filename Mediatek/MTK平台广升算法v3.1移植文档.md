@@ -1,4 +1,4 @@
-# 上海广升信息技术有限公司的相机产品 Mediatek 平台移植包 v3.1
+# 上海广升信息技术有限公司 Mediatek 平台相机算法移植包 v3.1
 
 为 Mediatek 系统扩展多种相机效果的移植包  
 
@@ -48,11 +48,7 @@
 | :-------   | :-----: | :-----: |
 | Android 10 |    -    |    -    |
 | Android 11 |    -    |    -    |
-| Android 12 |    √    |    √    |
-| Android 13 |    √    |    √    |
-| Android 14 |    √    |    √    |
-| Android 15 |    √    |    √    |
-| Android 16 |    √    |    √    |
+| Android 12 - 16 |    √    |    √    |
 
 关于其他 Android 版本的 MTK 平台相机支持或**其他算法需求**，请[联系我们](#认证)
 
@@ -62,16 +58,16 @@
 移植前请准备好文本对比工具，比如 [Beyond Compare](https://www.scootersoftware.com/)  
 
 移植前须知：  
-* 切勿这样对比 (after | 系统源码)，虽然可以很方便的合入到系统源码，但是也会合入不必要的部分，甚至产生冲突。  
+* 切勿这样对比 **(after | 系统源码)**，虽然可以很方便的合入到系统源码，但是也会合入不必要的部分，甚至产生冲突。  
   因为我们的 after 是基于 before 上做的修改，而我们的 before 与需要合入的系统源码不一定相同，很可能产生不必要的合入。  
-  建议用对比工具这样对比 (before | after)，然后用编辑器单独打开系统源码要合入的文件，把差异一个一个合入，虽然比较慢，但是不会出错。  
+  建议用对比工具这样对比 **(before | after)**，然后用编辑器单独打开系统源码要合入的文件，把差异一个一个合入，虽然比较慢，但是不会出错。  
 
-* 移植包中遇到 mt6768, mgvi_64_armv82, mssi_64_cn 这类和编译参数相关的目录，请根据自身情况自行调整到正确的目录。  
+* 移植包中遇到 **mt6768**, **mgvi_64_armv82**, **mssi_64_cn**, **k69v1_64_k419** 这类和编译参数相关的目录，请根据实际情况自行调整到正确的目录。  
 
 ### 移植步骤
 
 1. **合入**  
-   开始移植前需要知道目标系统的 Android 版本，ISP 版本（6s、7），以便从以下表格中选择自己需要移植的内容。  
+   开始移植前需要知道目标系统的 Android 版本，ISP 版本（3、4、6s、7、7s、7sp），以便从以下表格中选择自己需要移植的内容。  
    _如果不清楚当前的 ISP 版本请默认选择 ISP6s，如果是天玑 9000 系列一般为 ISP7，具体以实际情况为准_  
 
    比如 **ISP6s**，则选择第 **1 行 1 列**中的所有内容移植，其他内容忽略。  
@@ -82,8 +78,8 @@
 
    如未解耦编译，说明唯一的一份源码即是 vnd 又是 sys，都移植上去即可。  
 
-   |            | ISP6S      | ISP7       |
-   | :-------   | :--------- | :--------- |
+   |            | ISP3, ISP4, ISP6S   | ISP7, ISP7s, ISP7sp |
+   | :-------   | :------------------ | :------------------ |
    | **Android 12 - 16** | vnd: [before](./before) \| [after](./after)<br/>vnd: [before-isp6s](./before-isp6s/) \| [after-isp6s](./after-isp6s/)<br/>sys: [before-system](./before-system) \| [after-system](./after-system) | vnd: [before](./before) \| [after](./after)<br/>vnd: [before-isp7](./before-isp7/) \| [after-isp7](./after-isp7/)<br/>sys: [before-system](./before-system) \| [after-system](./after-system) |
 
    移植工作量预计：  
@@ -91,7 +87,7 @@
      广升的算法库，只有新增文件，复制粘贴到正确的位置即可。  
      **预计耗时 1 分钟**  
    - vnd: before-isp? | after-isp?  
-     基于 MTK HAL 实现的图像处理，其中修改约 17 个文件。  
+     基于 MTK HAL 实现的图像处理，其中修改约 18 个文件。  
      **预计耗时 20~40 分钟**  
    - sys: before-system | after-system  
      包含广升相机 App 和 system prop 属性设置，复制粘贴到正确的位置即可。  
@@ -112,10 +108,6 @@
         ADUPS_CAMERA_APP_SUPPORT = no
         ```  
 
-   - 是否已经按照客户的实际需求开关对应的算法宏？  
-     是：什么都不用做。  
-     否：请按照邮件中的要求修改 SystemConfig.mk 中对应的宏（**仅修改 SystemConfig.mk 即可， VendorConfig.mk 无需修改建议保持默认的全开**）。 
-
    - 是否想把广升相机 App 移到 packages 目录下？  
      是：自行移动后请务必保证 `after-system/vendor/adups/device.mk` 文件内所写入的属性能够在系统运行时读到。  
      > **注意：** 这里指的是 system_codebase 下的 App。vendor_codebase 下没有 App，**不建议把 `after/vendor/adups` 算法库目录放到 packages 下**，因为后期会频繁发布增量移植包来迭代算法，如果自行改动 vendor_codebase 中的目录结构，在后续合入增量移植包时定会产生不必要的麻烦。  
@@ -132,9 +124,22 @@
      > ISP6S：[device/mediatek/vendor/mgvi_64_armv82/VendorConfig.mk](after-isp6s/device/mediatek/vendor/mgvi_64_armv82/VendorConfig.mk)  
      > ISP7 ：[device/mediatek/vendor/mgvi_64_armv82/VendorConfig.mk](after-isp7/device/mediatek/vendor/mgvi_64_armv82/VendorConfig.mk)
      > 
+
+   - 是否已经按照客户的实际需求开关对应的算法宏？  
+     是：什么都不用做。  
+     否：请按照邮件中的要求修改 SystemConfig.mk 中对应的宏（**仅修改 SystemConfig.mk 即可， VendorConfig.mk 无需修改建议保持默认的全开**）。 
+
+     > 附：  
+     > 
      > System 的宏变量:   
      > System：[device/mediatek/system/mssi_64_cn/SystemConfig.mk](after-system/device/mediatek/system/mssi_64_cn/SystemConfig.mk)  
 
+   - 是否需要 16K 页面大小的支持？（vendor_codebase 是 Android 15 前的请忽略该问答）  
+     从 Android 15 起，Google 要求现有 Native Library 都必须在 64 位设备上支持 16K 的页面大小，否则无法过 GMS 验证。    
+     什么是 16K 页面大小请点击[这里](https://developer.android.com/guide/practices/page-sizes?hl=zh-cn)  
+     是：请在过 GMS 验证前告知我们。  
+     否：什么都不用做。  
+     如果不知道是否需要可以先忽略。  
 
 1. **编译**  
    编译 ROM。  
@@ -157,7 +162,7 @@
 
 
 ## 认证
-该移植包内所有算法都是 Demo 版本，成像或预览都会带有 Demo 字样，如需商用请联系我们 PM 或商务授权。  
+该移植包内所有算法都是 Demo 版本，成像和预览都会带有 Demo 字样，如需商用请联系我们 PM 或商务授权。  
 Email：[jinxing@abupdate.com](mailto:jinxing@abupdate.com)  
 
 ## 算法介绍
