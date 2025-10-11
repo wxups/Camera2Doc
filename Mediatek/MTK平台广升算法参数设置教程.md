@@ -69,7 +69,8 @@ Android 系统中，Camera ID 为 0 是后摄，1 是前摄，其他镜头依次
      ![image](images/img_cz_03.png)
      ![image](images/img_cz_04.png)
 
-     导出后即可查看图片，其中 before 开头的是从系统中抓取的原始输入图，out 是经过算法合成后的图像。  
+     导出后即可查看图片，其中每组为一次拍照产生的多个图像，文件名 in 结尾的（长文件名）是从系统中抓取的原始输入图，out 结尾的（短文件名）是经过算法合成后的图像。  
+
      由于是 NV21 格式，需要下载特定工具才能查看。  
      我们推荐使用 PixelViewer [https://carinastudio.azurewebsites.net/PixelViewer/](https://carinastudio.azurewebsites.net/PixelViewer/) 是一款免费开源的原始图像查看器。  
      下载后将导出的文件拖入程序内
@@ -78,3 +79,6 @@ Android 系统中，Camera ID 为 0 是后摄，1 是前摄，其他镜头依次
 
      需要知晓的是，如果看到的图像色彩不对，请按照上方例图正确选择程序内右侧的格式 **（NV21(YUV420sp)）**。  
      如果图像方向不对，这是正常的，因为 Android 出来的原始图像都是横的，后摄图像一般是头朝左，前摄图像一般是头朝右，请勿见怪。  
+
+     
+     _打开 dump 后，每次使用对应算法拍照都会保存原始图像且程序不会自动清理。每次手动 dump 后需要手动执行清理命令 `adb shell rm -rf /data/vendor/camera_dump/hdr`（切勿删除 camera_dump 目录，否则无法保存图像），以清理设备中已导出的图像，避免下次导出时导出重复图像，拖慢导出速度_   
